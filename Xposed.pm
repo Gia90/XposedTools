@@ -166,7 +166,7 @@ sub check_target_sdk_platform($$;$) {
             print_error('host builds are not supported prior to Android 5.0 (SDK 21)') unless $wildcard;
             return 0;
         }
-    } elsif ($platform ne 'arm' && $platform ne 'x86') {
+    } elsif ($platform ne 'arm' && $platform ne 'x86' && $platform ne 'x86_64') {
         print_error("Unsupported target platform $platform");
         return 0;
     }
@@ -226,7 +226,7 @@ sub get_outdir($) {
         return 'out/target/product/generic';
     } elsif ($platform eq 'armv5') {
         return 'out_armv5/target/product/generic';
-    } elsif ($platform eq 'x86' || $platform eq 'arm64') {
+    } elsif ($platform eq 'x86' || $platform eq 'arm64' || $platform eq 'x86_64') {
         return 'out/target/product/generic_' . $platform;
     } else {
         print_error("Could not determine output directory for $platform");
@@ -256,6 +256,8 @@ sub get_lunch_mode($$) {
         return ($sdk <= 17) ? 'full-eng' : 'aosp_arm-eng';
     } elsif ($platform eq 'x86') {
         return ($sdk <= 17) ? 'full_x86-eng' : 'aosp_x86-eng';
+    } elsif ($platform eq 'x86_64') {
+        return ($sdk <= 17) ? 'full_x86_64-eng' : 'aosp_x86_64-eng';
     } elsif ($platform eq 'arm64' && $sdk >= 21) {
         return 'aosp_arm64-eng';
     } else {
